@@ -58,6 +58,7 @@ function fillScene() {
 	// Add robot body here, put arm at top.
 	// Note that "body" is already declared at top of this code.
 	// Here's the call to create the body itself:
+    arm.position.y = bodyLength;
 	createRobotBody( body, bodyLength, robotBodyMaterial );
     body.add( arm );
     
