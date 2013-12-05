@@ -26,9 +26,15 @@ function createCylinderFromEnds( material, radiusTop, radiusBottom, top, bottom,
 	openEnded = (openEnded === undefined) ? false : openEnded;
 
 	// Dummy settings, replace with proper code:
-	var length = top.sub(top, bottom).length();
-	var cylAxis = top.sub(top, bottom);
-	var center = new THREE.Vector3((top.x+bottom.x)/2, (top.y+bottom.y)/2, (top.z+bottom.z)/2);
+	// get cylinder height
+    var cylAxis = new THREE.Vector3();
+    cylAxis.subVectors( top, bottom );
+    var length = cylAxis.length();
+    
+    // get cylinder center for translation
+    var center = new THREE.Vector3();
+    center.addVectors( top, bottom );
+    center.divideScalar( 2.0 );
 	////////////////////
 
 	var cylGeom = new THREE.CylinderGeometry( radiusTop, radiusBottom, length, segmentsWidth, 1, openEnded );
