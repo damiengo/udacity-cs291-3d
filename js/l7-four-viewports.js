@@ -238,11 +238,22 @@ function init() {
 		viewSize / 2, -viewSize / 2, 
 		-1000, 1000 );
 	topCam.up.set( 1, 0, 0 );
+
+	frontCam = new THREE.OrthographicCamera( 
+		-aspectRatio*viewSize / 2, aspectRatio*viewSize / 2, 
+		viewSize / 2, -viewSize / 2, 
+		-1000, 1000 );
+	frontCam.up.set( 1, 0, 0 );
+
+	sideCam = new THREE.OrthographicCamera( 
+		-aspectRatio*viewSize / 2, aspectRatio*viewSize / 2, 
+		viewSize / 2, -viewSize / 2, 
+		-1000, 1000 );
+	sideCam.up.set( 0, 1, 1 );
     
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,310,0);
-
 }
 
 function drawHelpers() {
@@ -282,7 +293,19 @@ function render() {
 	topCam.lookAt( cameraControls.target );
 	renderer.setViewport( 0.5*canvasWidth, 0.5*canvasHeight, 0.5*canvasWidth, 0.5*canvasHeight );
 	renderer.render( scene, topCam );
-      
+	
+	// front view
+	frontCam.position.copy( cameraControls.target );
+	frontCam.position.x -=1 ;
+	frontCam.lookAt( cameraControls.target );
+	renderer.setViewport( 0, 0.5*canvasHeight, 0.5*canvasWidth, 0.5*canvasHeight );
+	renderer.render( scene, frontCam );
+	
+	// side view
+	sideCam.position.copy( cameraControls.target );
+	sideCam.lookAt( cameraControls.target );
+	renderer.setViewport( 0.5*canvasWidth, 0, 0.5*canvasWidth, 0.5*canvasHeight );
+	renderer.render( scene, sideCam );
 }
 
 try {
