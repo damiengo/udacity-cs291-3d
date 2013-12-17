@@ -27,7 +27,7 @@ function fillScene() {
 	// Student: texture is located at URL /media/img/cs291/textures/grass512x512.jpg
     var grass = THREE.ImageUtils.loadTexture( path + 'media/img/cs291/textures/grass512x512.jpg' );
     grass.wrapS = grass.wrapT = THREE.RepeatWrapping;
-    grass.repeat.set( 2, 2 );
+    grass.repeat.set( 10, 10 );
 	var solidGround = new THREE.Mesh(
 		new THREE.PlaneGeometry( 10000, 10000, 100, 100 ),
         new THREE.MeshLambertMaterial( { color: 0xFFFFFF, map: grass } ) );
