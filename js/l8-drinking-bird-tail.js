@@ -9,13 +9,16 @@ var bevelRadius = 1.9;
 var clock = new THREE.Clock();
 var cube, sphere, cylinder;
 
+var path = "/";
+
 function createTail() {
 	// Student: add the tail texture here
 	// texture is located at /media/img/cs291/textures/feather.png
+    var tailxture = THREE.ImageUtils.loadTexture( path + 'media/img/cs291/textures/feather.png' );
 	var tail = new THREE.Mesh(
 		new THREE.PlaneGeometry( 100, 100, 1, 1 ),
 		new THREE.MeshLambertMaterial(
-			{ side: THREE.DoubleSide } ) );
+            { side: THREE.DoubleSide, map: tailxture, transparent: true } ) );
 
 	// I need the order to be X rotation before Y, so set the order to YZX;
 	// note that, as usual, the order is read right to left.
