@@ -23,7 +23,10 @@ void main() {
 	// Student: use the vModelPosition as an input to a function and
 	// then multiply the diffuse contribution by this amount.
     
-    diffuse = diffuse * (0.5 + 0.5 * (sin(uScale * vModelPosition.x) + sin(uScale * vModelPosition.y) + sin(uScale * vModelPosition.z)));
-
+    diffuse *= ( 0.5 + 
+    0.5 * sin( uScale * vModelPosition.x ) * 
+          sin( uScale * vModelPosition.y ) * 
+          sin( uScale * vModelPosition.z ) );
+    
 	gl_FragColor = vec4( uKd * uMaterialColor * uDirLightColor * diffuse, 1.0 );
 }
