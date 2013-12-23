@@ -29,30 +29,26 @@ void main() {
 	
 	// Student: use these two jiggledNormals instead of the regular normal
 	// in the reflection model that follows.
-    vec3 jiggledNormals[2];
-	for ( int i = 0; i < 2; i++) {
-		vec3 offset = (i==0) ? vWorldPosition : -vWorldPosition;
-		offset.y = 0.0;
-		jiggledNormals[i] = normalize( normal + uGroove * normalize( offset ) );
-	}
-	
-	// diffuse: N * L. Normal must be normalized, since it's interpolated.
-	float diffuse = max( dot( normal, lVector ), 0.0);
+    for ( int i = 0; i < 2; i++) {
+        vec3 offset = (i==0) ? vWorldPosition : -vWorldPosition;
+        offset.y = 0.0;
+        vec3 jiggledNormal = normalize( normal + uGroove * normalize( offset ) );
+        // diffuse: N * L. Normal must be normalized, since it's interpolated.
+        float diffuse = max( dot( jiggledNormal, lVector ), 0.0);
+        // scale diffuse contribution down by half, since there are two normals
+        gl_FragColor.rgb += 0.5 * uKd * uMaterialColor * uDirLightColor * diffuse;
+        // specular: N * H to a power. H is light vector + view vector
+        vec3 viewPosition = normalize( vViewPosition );
+        vec3 pointHalfVector = normalize( lVector + viewPosition );
+        float pointDotNormalHalf = max( dot( jiggledNormal, pointHalfVector ), 0.0 );
+        float specular = uKs * pow( pointDotNormalHalf, shininess );
+        specular *= diffuse*(2.0 + shininess)/8.0;
+        // This can give a hard termination to the highlight, but it's better than some weird sparkle.
+        if (diffuse <= 0.0) {
+            specular = 0.0;
+        }
+        // scale specular contribution down by half, since there are two normals
+        gl_FragColor.rgb += 0.5 * uDirLightColor * uSpecularColor * specular;
+    }
 
-	gl_FragColor.rgb += uKd * uMaterialColor * uDirLightColor * diffuse;
-
-	// specular: N * H to a power. H is light vector + view vector
-	vec3 viewPosition = normalize( vViewPosition );
-	vec3 pointHalfVector = normalize( lVector + viewPosition );
-	float pointDotNormalHalf = max( dot( jiggledNormals[0], pointHalfVector ), 0.0 );
-	float specular = uKs * pow( pointDotNormalHalf, shininess );
-	specular *= diffuse*(2.0 + shininess)/8.0;
-
-	// This can give a hard termination to the highlight, but it's better than some weird sparkle.
-	// Note: we don't quit here because the solution will use this code twice.
-	if (diffuse <= 0.0) {
-		specular = 0.0;
-	}
-
-	gl_FragColor.rgb += uDirLightColor * uSpecularColor * specular;
 }
