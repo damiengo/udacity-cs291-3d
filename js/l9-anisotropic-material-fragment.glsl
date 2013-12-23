@@ -29,10 +29,11 @@ void main() {
 	
 	// Student: use these two jiggledNormals instead of the regular normal
 	// in the reflection model that follows.
+    vec3 jiggledNormals[2];
 	for ( int i = 0; i < 2; i++) {
 		vec3 offset = (i==0) ? vWorldPosition : -vWorldPosition;
 		offset.y = 0.0;
-		vec3 jiggledNormal = normalize( normal + uGroove * normalize( offset ) );
+		jiggledNormals[i] = normalize( normal + uGroove * normalize( offset ) );
 	}
 	
 	// diffuse: N * L. Normal must be normalized, since it's interpolated.
@@ -43,7 +44,7 @@ void main() {
 	// specular: N * H to a power. H is light vector + view vector
 	vec3 viewPosition = normalize( vViewPosition );
 	vec3 pointHalfVector = normalize( lVector + viewPosition );
-	float pointDotNormalHalf = max( dot( normal, pointHalfVector ), 0.0 );
+	float pointDotNormalHalf = max( dot( jiggledNormals[0], pointHalfVector ), 0.0 );
 	float specular = uKs * pow( pointDotNormalHalf, shininess );
 	specular *= diffuse*(2.0 + shininess)/8.0;
 
