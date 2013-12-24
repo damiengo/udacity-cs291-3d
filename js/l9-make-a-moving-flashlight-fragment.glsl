@@ -30,7 +30,7 @@ void main() {
 	// flashlight: is XY point in camera space inside radius?
 	// Student: compare view position to uFlashOffset and see
 	// if distance between the two is inside uFlashRadius
-	if ( length( vViewPosition.xy ) > uFlashRadius ) {
+	if ( length( vViewPosition.xy - uFlashOffset.xy ) > uFlashRadius ) {
 		return;
 	}
 
