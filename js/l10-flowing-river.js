@@ -181,7 +181,12 @@ function render() {
 	// Transform the texture here to move downwards at
 	// a rate of one copy of the texture per second.
     var time = clock.getElapsedTime();
-    texture[effectController.mtlName].offset.set( 0, time );
+    //texture[effectController.mtlName].offset.set( 0, time );
+    // add some wobble
+    texture[effectController.mtlName].offset.set(
+        0.2*Math.sin(2*time), time );
+    texture[effectController.mtlName].repeat.set( 
+        effectController.repeat, effectController.repeat/3 );
 	
 	renderer.render(scene, camera);
 }
